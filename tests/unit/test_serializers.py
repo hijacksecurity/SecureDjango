@@ -2,14 +2,21 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 
 from api.models import Comment, Post
-from api.serializers import (CommentSerializer, PostListSerializer,
-                             PostSerializer, UserSerializer)
+from api.serializers import (
+    CommentSerializer,
+    PostListSerializer,
+    PostSerializer,
+    UserSerializer,
+)
 
 
 class PostSerializerTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
-            username="testuser", email="test@example.com", password="testpass123"
+            # pragma: allowlist nextline secret
+            username="testuser",
+            email="test@example.com",
+            password="testpass123",
         )
         self.post = Post.objects.create(
             title="Test Post",
@@ -63,7 +70,10 @@ class PostSerializerTest(TestCase):
 class CommentSerializerTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
-            username="testuser", email="test@example.com", password="testpass123"
+            # pragma: allowlist nextline secret
+            username="testuser",
+            email="test@example.com",
+            password="testpass123",
         )
         self.post = Post.objects.create(
             title="Test Post", content="Content", author=self.user
@@ -102,6 +112,7 @@ class UserSerializerTest(TestCase):
         self.user = User.objects.create_user(
             username="testuser",
             email="test@example.com",
+            # pragma: allowlist nextline secret
             password="testpass123",
             first_name="Test",
             last_name="User",

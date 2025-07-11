@@ -45,6 +45,7 @@ spec:
         - name: POSTGRES_USER
           value: myapp
         - name: POSTGRES_PASSWORD
+          # pragma: allowlist nextline secret
           value: testpassword
         securityContext:
           allowPrivilegeEscalation: false

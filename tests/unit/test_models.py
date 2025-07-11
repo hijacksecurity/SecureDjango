@@ -8,7 +8,10 @@ from api.models import Comment, Post
 class PostModelTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
-            username="testuser", email="test@example.com", password="testpass123"
+            # pragma: allowlist nextline secret
+            username="testuser",
+            email="test@example.com",
+            password="testpass123",
         )
 
     def test_post_creation(self):
@@ -49,7 +52,10 @@ class PostModelTest(TestCase):
 class CommentModelTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
-            username="testuser", email="test@example.com", password="testpass123"
+            # pragma: allowlist nextline secret
+            username="testuser",
+            email="test@example.com",
+            password="testpass123",
         )
         self.post = Post.objects.create(
             title="Test Post", content="This is a test post content", author=self.user

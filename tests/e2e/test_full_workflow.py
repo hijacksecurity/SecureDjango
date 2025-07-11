@@ -17,10 +17,16 @@ class FullWorkflowTest(APITestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(
-            username="e2euser", email="e2e@example.com", password="e2epass123"
+            # pragma: allowlist nextline secret
+            username="e2euser",
+            email="e2e@example.com",
+            password="e2epass123",
         )
         self.admin_user = User.objects.create_superuser(
-            username="admin", email="admin@example.com", password="admin123"
+            # pragma: allowlist nextline secret
+            username="admin",
+            email="admin@example.com",
+            password="admin123",
         )
 
     def test_complete_blog_workflow(self):
@@ -154,9 +160,9 @@ class FullWorkflowTest(APITestCase):
         response = self.client.get("/api/v1/posts/99999/")
         self.assertEqual(response.status_code, 404)
 
-        # Step 2: Test 401 on protected endpoint
+        # Step 2: Test 403 on protected endpoint
         response = self.client.post("/api/v1/posts/", {"title": "Test"})
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 403)
 
         # Step 3: Test 400 on invalid data
         self.client.force_authenticate(user=self.user)

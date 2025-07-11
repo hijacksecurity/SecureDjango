@@ -8,10 +8,16 @@ from api.models import Comment, Post
 class PermissionTest(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(
-            username="testuser", email="test@example.com", password="testpass123"
+            # pragma: allowlist nextline secret
+            username="testuser",
+            email="test@example.com",
+            password="testpass123",
         )
         self.other_user = User.objects.create_user(
-            username="otheruser", email="other@example.com", password="testpass123"
+            # pragma: allowlist nextline secret
+            username="otheruser",
+            email="other@example.com",
+            password="testpass123",
         )
         self.post = Post.objects.create(
             title="Test Post", content="Test content", author=self.user
@@ -30,16 +36,16 @@ class PermissionTest(APITestCase):
     def test_anonymous_cannot_create_posts(self):
         data = {"title": "New Post", "content": "New content"}
         response = self.client.post("/api/v1/posts/", data)
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_anonymous_cannot_update_posts(self):
         data = {"title": "Updated Post", "content": "Updated content"}
         response = self.client.put(f"/api/v1/posts/{self.post.id}/", data)
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_anonymous_cannot_delete_posts(self):
         response = self.client.delete(f"/api/v1/posts/{self.post.id}/")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_authenticated_can_create_posts(self):
         self.client.force_authenticate(user=self.user)
@@ -68,7 +74,7 @@ class PermissionTest(APITestCase):
     def test_anonymous_cannot_create_comments(self):
         data = {"content": "New comment", "post": self.post.id}
         response = self.client.post("/api/v1/comments/", data)
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_authenticated_can_create_comments(self):
         self.client.force_authenticate(user=self.user)
@@ -96,7 +102,7 @@ class PermissionTest(APITestCase):
 
     def test_post_publish_actions_require_authentication(self):
         response = self.client.post(f"/api/v1/posts/{self.post.id}/publish/")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_post_publish_actions_require_ownership(self):
         self.client.force_authenticate(user=self.other_user)

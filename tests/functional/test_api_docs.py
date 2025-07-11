@@ -9,7 +9,10 @@ class APIDocumentationTest(TestCase):
     def setUp(self):
         self.client = Client()
         self.user = User.objects.create_user(
-            username="testuser", email="test@example.com", password="testpass123"
+            # pragma: allowlist nextline secret
+            username="testuser",
+            email="test@example.com",
+            password="testpass123",
         )
 
     def test_swagger_ui_endpoint(self):

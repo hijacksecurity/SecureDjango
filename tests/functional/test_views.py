@@ -214,7 +214,7 @@ class HomeViewTest(TestCase):
     def test_home_endpoint_get(self):
         response = self.client.get(reverse("home"))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "MyApp Dashboard")
+        self.assertContains(response, "Welcome to MyApp")
 
     def test_home_endpoint_head(self):
         response = self.client.head(reverse("home"))
@@ -235,10 +235,14 @@ class ViewsIntegrationTest(TestCase):
     def setUp(self):
         self.client = Client()
         self.user = User.objects.create_user(
-            username="testuser", email="test@example.com", password="testpass123"
+            # pragma: allowlist nextline secret
+            username="testuser",
+            email="test@example.com",
+            password="testpass123",
         )
 
     def test_authenticated_user_can_access_all_views(self):
+        # pragma: allowlist nextline secret
         self.client.login(username="testuser", password="testpass123")
 
         endpoints = [

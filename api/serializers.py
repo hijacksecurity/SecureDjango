@@ -49,7 +49,7 @@ class PostSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["id", "created_at", "updated_at"]
 
-    def get_comments_count(self, obj):
+    def get_comments_count(self, obj) -> int:
         return obj.comments.count()
 
 
@@ -72,5 +72,5 @@ class PostListSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["id", "created_at", "updated_at"]
 
-    def get_comments_count(self, obj):
+    def get_comments_count(self, obj) -> int:
         return obj.comments.count()

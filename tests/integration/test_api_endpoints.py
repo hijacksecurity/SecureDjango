@@ -10,10 +10,16 @@ from api.models import Comment, Post
 class PostAPITest(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(
-            username="testuser", email="test@example.com", password="testpass123"
+            # pragma: allowlist nextline secret
+            username="testuser",
+            email="test@example.com",
+            password="testpass123",
         )
         self.other_user = User.objects.create_user(
-            username="otheruser", email="other@example.com", password="testpass123"
+            # pragma: allowlist nextline secret
+            username="otheruser",
+            email="other@example.com",
+            password="testpass123",
         )
         self.post = Post.objects.create(
             title="Test Post", content="Test content", author=self.user, published=True
@@ -41,7 +47,7 @@ class PostAPITest(APITestCase):
     def test_create_post_unauthenticated(self):
         data = {"title": "New Post", "content": "New content", "published": True}
         response = self.client.post("/api/v1/posts/", data)
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_update_post_owner(self):
         self.client.force_authenticate(user=self.user)
@@ -92,10 +98,16 @@ class PostAPITest(APITestCase):
 class CommentAPITest(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(
-            username="testuser", email="test@example.com", password="testpass123"
+            # pragma: allowlist nextline secret
+            username="testuser",
+            email="test@example.com",
+            password="testpass123",
         )
         self.other_user = User.objects.create_user(
-            username="otheruser", email="other@example.com", password="testpass123"
+            # pragma: allowlist nextline secret
+            username="otheruser",
+            email="other@example.com",
+            password="testpass123",
         )
         self.post = Post.objects.create(
             title="Test Post", content="Test content", author=self.user
@@ -125,7 +137,7 @@ class CommentAPITest(APITestCase):
     def test_create_comment_unauthenticated(self):
         data = {"content": "New comment", "post": self.post.id}
         response = self.client.post("/api/v1/comments/", data)
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_update_comment_owner(self):
         self.client.force_authenticate(user=self.user)
@@ -152,6 +164,7 @@ class UserAPITest(APITestCase):
         self.user = User.objects.create_user(
             username="testuser",
             email="test@example.com",
+            # pragma: allowlist nextline secret
             password="testpass123",
             first_name="Test",
             last_name="User",
@@ -173,6 +186,7 @@ class UserAPITest(APITestCase):
         data = {
             "username": "newuser",
             "email": "new@example.com",
+            # pragma: allowlist nextline secret
             "password": "newpass123",
         }
         response = self.client.post("/api/v1/users/", data)

@@ -7,8 +7,13 @@ from django.db import connection
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
-from prometheus_client import (CONTENT_TYPE_LATEST, Counter, Gauge, Histogram,
-                               generate_latest)
+from prometheus_client import (
+    CONTENT_TYPE_LATEST,
+    Counter,
+    Gauge,
+    Histogram,
+    generate_latest,
+)
 
 # Prometheus metrics
 REQUEST_COUNT = Counter(
@@ -31,7 +36,7 @@ def ws_test(request):
     return render(request, "ws-test.html")
 
 
-@require_http_methods(["GET"])
+@require_http_methods(["GET", "HEAD"])
 def health_check(request):
     return JsonResponse(
         {
@@ -161,6 +166,7 @@ def prometheus_metrics(request):
 
 
 from django.contrib.auth.models import User
+
 # REST API ViewSets
 from rest_framework import permissions
 from rest_framework import status as drf_status
@@ -170,8 +176,12 @@ from rest_framework.response import Response
 
 from .models import Comment, Post
 from .permissions import IsOwnerOrReadOnly
-from .serializers import (CommentSerializer, PostListSerializer,
-                          PostSerializer, UserSerializer)
+from .serializers import (
+    CommentSerializer,
+    PostListSerializer,
+    PostSerializer,
+    UserSerializer,
+)
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -179,11 +189,11 @@ class PostViewSet(viewsets.ModelViewSet):
     Simple CRUD API for blog posts
 
     Available endpoints:
-    - GET /api/posts/ - List all posts
-    - POST /api/posts/ - Create a new post
-    - GET /api/posts/{id}/ - Get a specific post
-    - PUT/PATCH /api/posts/{id}/ - Update a post
-    - DELETE /api/posts/{id}/ - Delete a post
+    - GET /api/v1/posts/ - List all posts
+    - POST /api/v1/posts/ - Create a new post
+    - GET /api/v1/posts/{id}/ - Get a specific post
+    - PUT/PATCH /api/v1/posts/{id}/ - Update a post
+    - DELETE /api/v1/posts/{id}/ - Delete a post
     """
 
     queryset = Post.objects.all()
@@ -219,11 +229,11 @@ class CommentViewSet(viewsets.ModelViewSet):
     Simple CRUD API for comments
 
     Available endpoints:
-    - GET /api/comments/ - List all comments
-    - POST /api/comments/ - Create a new comment
-    - GET /api/comments/{id}/ - Get a specific comment
-    - PUT/PATCH /api/comments/{id}/ - Update a comment
-    - DELETE /api/comments/{id}/ - Delete a comment
+    - GET /api/v1/comments/ - List all comments
+    - POST /api/v1/comments/ - Create a new comment
+    - GET /api/v1/comments/{id}/ - Get a specific comment
+    - PUT/PATCH /api/v1/comments/{id}/ - Update a comment
+    - DELETE /api/v1/comments/{id}/ - Delete a comment
     """
 
     queryset = Comment.objects.all()
@@ -239,10 +249,10 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     Read-only API for users
 
     Available endpoints:
-    - GET /api/users/ - List all users
-    - GET /api/users/{id}/ - Get a specific user
+    - GET /api/v1/users/ - List all users
+    - GET /api/v1/users/{id}/ - Get a specific user
     """
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.AllowAny]
