@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myapp-config
+  namespace: myapp
+data:
+  ENVIRONMENT: "test"
+  DEBUG: "True"
+  ALLOWED_HOSTS: "myapp-test.example.com,localhost,127.0.0.1,10.1.0.0/16,*"
+  DJANGO_SETTINGS_MODULE: "config.settings.test"
+  REDIS_URL: "redis://redis:6379"

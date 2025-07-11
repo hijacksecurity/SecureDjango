@@ -1,0 +1,7 @@
+# Trivy ignore file for legitimate security exceptions
+# See SECURITY.md for detailed explanations
+
+# PostgreSQL Database Requirements
+AVD-KSV-0014  # PostgreSQL requires write access to filesystem
+AVD-KSV-0020  # PostgreSQL uses standard user ID 70
+AVD-KSV-0021  # PostgreSQL uses standard group ID 70

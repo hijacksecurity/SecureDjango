@@ -1,0 +1,19 @@
+<div class="space-y-2">
+    <div class="flex items-center">
+        <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+        <span class="text-sm">Application: {{ status.application }}</span>
+    </div>
+    <div class="flex items-center">
+        {% if status.database == 'Connected' %}
+            <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+        {% else %}
+            <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+        {% endif %}
+        <span class="text-sm">Database: {{ status.database }}</span>
+    </div>
+    <div class="flex items-center">
+        <div class="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+        <span class="text-sm">Pod: {{ status.hostname }}</span>
+    </div>
+    <div class="text-xs text-gray-500">Last updated: {{ status.timestamp|slice:":19" }}</div>
+</div>

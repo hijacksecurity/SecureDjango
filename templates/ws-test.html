@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Test</title>
+</head>
+<body>
+    <h1>WebSocket Test Page</h1>
+    <div id="status">Not connected</div>
+    <div id="messages"></div>
+
+    <script>
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const wsUrl = `${protocol}//${window.location.host}/ws/metrics/`;
+
+        console.log('Attempting to connect to:', wsUrl);
+        document.getElementById('status').textContent = 'Connecting to: ' + wsUrl;
+
+        const socket = new WebSocket(wsUrl);
+
+        socket.onopen = function(e) {
+            console.log('WebSocket connected!', e);
+            document.getElementById('status').textContent = 'Connected to: ' + wsUrl;
+        };
+
+        socket.onmessage = function(e) {
+            console.log('Message received:', e.data);
+            const msg = document.createElement('div');
+            msg.textContent = new Date().toISOString() + ': ' + e.data;
+            document.getElementById('messages').appendChild(msg);
+        };
+
+        socket.onerror = function(e) {
+            console.error('WebSocket error:', e);
+            document.getElementById('status').textContent = 'Error connecting to: ' + wsUrl;
+        };
+
+        socket.onclose = function(e) {
+            console.log('WebSocket closed:', e);
+            document.getElementById('status').textContent = 'Disconnected from: ' + wsUrl + ' (Code: ' + e.code + ')';
+        };
+    </script>
+</body>
+</html>

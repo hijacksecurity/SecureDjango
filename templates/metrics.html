@@ -1,0 +1,12 @@
+<div class="text-center">
+    <div class="text-2xl font-bold text-gray-900">{{ metrics.cpu_percent|floatformat:1 }}%</div>
+    <div class="text-sm text-gray-600">CPU Usage</div>
+</div>
+<div class="text-center">
+    <div class="text-2xl font-bold text-gray-900">{{ metrics.memory_percent|floatformat:1 }}%</div>
+    <div class="text-sm text-gray-600">Memory Usage</div>
+</div>
+<div class="text-center">
+    <div class="text-2xl font-bold text-gray-900">{{ metrics.disk_percent|floatformat:1 }}%</div>
+    <div class="text-sm text-gray-600">Disk Usage</div>
+</div>

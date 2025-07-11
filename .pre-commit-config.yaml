@@ -1,0 +1,145 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+# =============================================================================
+# Basic Code Quality & Security
+# =============================================================================
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v5.0.0
+  hooks:
+    - id: trailing-whitespace
+    - id: end-of-file-fixer
+    - id: check-yaml
+    - id: check-added-large-files
+      args: ['--maxkb=1000']
+    - id: check-case-conflict
+    - id: check-merge-conflict
+    - id: check-json
+    - id: check-toml
+    - id: check-xml
+    - id: debug-statements
+    - id: detect-aws-credentials
+      args: ['--allow-missing-credentials']
+    - id: detect-private-key
+
+# =============================================================================
+# Secret Detection - Gitleaks (Primary Secret Scanner)
+# =============================================================================
+- repo: https://github.com/gitleaks/gitleaks
+  rev: v8.27.2
+  hooks:
+    - id: gitleaks
+
+# =============================================================================
+# Python Security & Code Quality
+# =============================================================================
+- repo: https://github.com/psf/black
+  rev: 25.1.0
+  hooks:
+    - id: black
+
+- repo: https://github.com/PyCQA/isort
+  rev: 6.0.1
+  hooks:
+    - id: isort
+
+- repo: https://github.com/PyCQA/flake8
+  rev: 7.3.0
+  hooks:
+    - id: flake8
+      additional_dependencies: [flake8-docstrings]
+
+- repo: https://github.com/PyCQA/bandit
+  rev: 1.8.6
+  hooks:
+    - id: bandit
+      args: ['-r', '.']
+      exclude: ^(tests/|venv/)
+
+# Safety removed - repository structure changed
+
+# =============================================================================
+# Infrastructure Security
+# =============================================================================
+- repo: https://github.com/bridgecrewio/checkov
+  rev: 3.2.450
+  hooks:
+    - id: checkov
+      args: ['--framework', 'dockerfile,kubernetes,yaml']
+      exclude: ^(venv/|staticfiles/|\.git/)
+
+# =============================================================================
+# Secrets Detection - Additional Tools
+# =============================================================================
+- repo: https://github.com/Yelp/detect-secrets
+  rev: v1.5.0
+  hooks:
+    - id: detect-secrets
+      args: ['--baseline', '.secrets.baseline']
+      exclude: ^(\.git/|venv/|staticfiles/)
+
+# =============================================================================
+# YAML & JSON Security
+# =============================================================================
+- repo: https://github.com/adrienverge/yamllint
+  rev: v1.37.1
+  hooks:
+    - id: yamllint
+      args: [-c=.yamllint.yml]
+
+# =============================================================================
+# Docker Security
+# =============================================================================
+- repo: https://github.com/hadolint/hadolint
+  rev: v2.13.1-beta
+  hooks:
+    - id: hadolint-docker
+      args: ['--ignore', 'DL3008', '--ignore', 'DL3009']
+
+# =============================================================================
+# Commit Message Security
+# =============================================================================
+- repo: https://github.com/commitizen-tools/commitizen
+  rev: v4.8.3
+  hooks:
+    - id: commitizen
+      stages: [commit-msg]
+
+# =============================================================================
+# File Content Security
+# =============================================================================
+- repo: local
+  hooks:
+    - id: no-commit-to-branch
+      name: "Don't commit to main/master"
+      entry: bash -c 'if [[ $(git rev-parse --abbrev-ref HEAD) == "main" || $(git rev-parse --abbrev-ref HEAD) == "master" ]]; then echo "Cannot commit to main/master branch"; exit 1; fi'
+      language: system
+      pass_filenames: false
+      always_run: true
+
+    - id: check-secrets-in-env
+      name: Check for secrets in environment files
+      entry: bash -c 'if grep -r "password\|secret\|key\|token" --include="*.env*" --exclude=".env" .; then echo "Potential secrets found in env files"; exit 1; fi'
+      language: system
+      pass_filenames: false
+
+    - id: check-django-debug
+      name: Check Django DEBUG setting
+      entry: bash -c 'if grep -r "DEBUG.*=.*True" --include="*.py" config/settings/production.py; then echo "DEBUG=True found in production settings"; exit 1; fi'
+      language: system
+      pass_filenames: false
+
+# =============================================================================
+# Configuration
+# =============================================================================
+ci:
+  autofix_commit_msg: |
+    [pre-commit.ci] auto fixes from pre-commit hooks
+
+    for more information, see https://pre-commit.ci
+  autofix_prs: true
+  autoupdate_branch: ''
+  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+  autoupdate_schedule: weekly
+  skip: []
+  submodules: false

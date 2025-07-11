@@ -1,0 +1,47 @@
+---
+extends: default
+
+rules:
+  # Line length for readability
+  line-length:
+    max: 120
+    level: warning
+
+  # Allow truthy values for Kubernetes boolean fields
+  truthy:
+    allowed-values: ['true', 'false', 'yes', 'no', 'on', 'off']
+
+  # Comments formatting
+  comments:
+    min-spaces-from-content: 1
+
+  # Document formatting
+  document-start: disable
+  document-end: disable
+
+  # Indentation
+  indentation:
+    spaces: 2
+    indent-sequences: true
+
+  # Key ordering
+  key-ordering: disable
+
+  # Brackets
+  brackets:
+    min-spaces-inside: 0
+    max-spaces-inside: 1
+
+  # Braces
+  braces:
+    min-spaces-inside: 0
+    max-spaces-inside: 1
+
+ignore: |
+  .git/
+  venv/
+  staticfiles/
+  node_modules/
+  .tox/
+  .pytest_cache/
+  __pycache__/
