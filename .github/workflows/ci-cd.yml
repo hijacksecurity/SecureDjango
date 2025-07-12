@@ -13,9 +13,9 @@ permissions:
   pull-requests: write
 
 jobs:
-  SASTScan:
+  SAST:
     uses: hijacksecurity/SecurityAsAService/.github/workflows/sast.yml@main
 
-  SCAScan:
+  SCA:
     uses: hijacksecurity/SecurityAsAService/.github/workflows/sca.yml@main
     secrets: inherit
