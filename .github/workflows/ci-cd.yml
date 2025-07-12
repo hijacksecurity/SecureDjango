@@ -9,7 +9,6 @@ on:
 jobs:
   sast:
     uses: hijacksecurity/SecurityAsAService/.github/workflows/sast.yml@main
-    secrets: inherit
 
   sca:
     uses: hijacksecurity/SecurityAsAService/.github/workflows/sca.yml@main
