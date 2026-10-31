@@ -48,7 +48,7 @@ spec:
             cpu: "100m"
         securityContext:
           allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: false
+          readOnlyRootFilesystem: true
           runAsNonRoot: true
           runAsUser: 10003
           runAsGroup: 10003
@@ -57,6 +57,9 @@ spec:
               - ALL
           seccompProfile:
             type: RuntimeDefault
+        volumeMounts:
+        - name: data
+          mountPath: /data
         livenessProbe:
           exec:
             command:
@@ -71,3 +74,6 @@ spec:
             - ping
           initialDelaySeconds: 10
           periodSeconds: 5
+      volumes:
+      - name: data
+        emptyDir: {}
